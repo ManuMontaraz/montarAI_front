@@ -122,7 +122,9 @@ function register_user(event){
         alert(data.message)
     }).catch(error => {
         console.error("Error:", error)
-        alert("An error occurred while registering the user")
+        mtrans("error_registering_user").then(data=>{
+            alert(data)
+        })
     });
 }
 

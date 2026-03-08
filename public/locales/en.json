@@ -8,6 +8,7 @@
     "phone": "Phone (include the prefix if you are not from Spain)",
     "register": "Register",
     "login": "Login",
+    "logout": "Logout",
     "warn_fill_fields": "Please fill in all fields",
     "warn_password_not_match": "Both passwords do not match",
     "error_registering_user": "An error occurred while registering the user"
