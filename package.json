@@ -1,0 +1,37 @@
+{
+  "name": "montaraz_frontend",
+  "version": "0.0.1",
+  "description": "Frontend de una tienda online",
+  "keywords": [
+    "shop",
+    "web",
+    "online",
+    "nature"
+  ],
+  "homepage": "https://github.com/ManuMontaraz/montaraz_frontend#readme",
+  "bugs": {
+    "url": "https://github.com/ManuMontaraz/montaraz_frontend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ManuMontaraz/montaraz_frontend.git"
+  },
+  "license": "AGPL-3.0",
+  "author": "Manu Montaraz",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node private/app.js",
+    "dev": "nodemon private/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.10"
+  },
+  "dependencies": {
+    "dotenv": "16.5.0",
+    "express": "5.1.0",
+    "express-rate-limit": "8.0.1",
+    "socket.io": "4.8.1"
+  }
+}

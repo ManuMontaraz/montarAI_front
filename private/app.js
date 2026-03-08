@@ -1,0 +1,79 @@
+// Copyright (C) 2025 Manu Montaraz 
+ 
+// server.js
+const fs = require('fs')
+const path = require('path')
+const express = require('express')
+const dotenv = require('dotenv')
+const http = require('http')
+const dns = require('dns')
+const rateLimit = require('express-rate-limit')
+
+// Cargar variables de entorno
+dotenv.config()
+
+// Obtener el puerto del entorno
+const port = process.env.PORT
+
+// Configurar limitador de peticiones
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 100, // Limitar cada IP a 100 peticiones por ventana
+    message: 'Demasiadas peticiones, por favor intente de nuevo más tarde.'
+})
+
+// Crear app Express
+const app = express()
+
+dns.lookup(process.env.DNS, (error, address) => {
+    if (error) { 
+        console.error(`No se pudo resolver el dominio: ${process.env.DNS}`)
+        console.error(err)
+        process.exit(1) // Salir si falla la resolución
+    }
+ 
+    console.log(`Dirección IP del proxy: ${address}`)
+    
+    app.set('trust proxy', address)
+    app.use(limiter) 
+    app.use(express.json())
+
+    // Crear servidor HTTP
+    const server = http.createServer(app)
+
+    // Exportar app y servidor
+    module.exports = { app, server }
+
+    // Importar módulos necesarios
+    //require(path.join(__dirname,'..','..','multilang','js','multilang.js'))
+
+    //const { translate, get_language } = require(path.join(__dirname,'..','..','multilang','js','functions.js'))
+
+    // Servir archivos dinámicos desde la carpeta public
+    app.get('/', async (request, response) => { 
+        
+        const language = "es"//await get_language(request.headers.cookie) || "es"
+
+        //console.log(__dirname, '/..', '/..', '/..', '/public', '/html', '/index.html')
+        const filePath = path.join(__dirname, '..', 'public', 'html', 'index.html')
+        fs.readFile(filePath, 'utf8', (error, html) => {
+            if (error) {
+                return response.status(500).send('Error leyendo el archivo')
+            }
+
+            let replacedHtml = html.replaceAll("[language]", language)
+
+            response.set('Content-Type', 'text/html')
+            response.send(replacedHtml)
+        })
+    })
+
+    // Servir archivos estáticos desde la carpeta public
+    app.use(express.static(path.join(__dirname, '..', 'public'))) 
+
+    // Arrancar servidor
+    server.listen(port, () => {
+        console.log(`Servidor HTTP escuchando en http://localhost:${port}`)
+    })
+})
+
