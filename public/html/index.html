@@ -9,10 +9,28 @@
     <link rel='stylesheet' type='text/css' media='screen' href='css/style.css'>
 
     <script src="js/app.js"></script>
-    <script src="js/login.js"></script>
     <script src="js/multilang.js"></script>
+    <script src="js/session.js"></script>
 </head>
 <body>
     <h1 mtrans="text|in_development,title|in_development"></h1>
+    <select id="select_lang" onchange="set_language(this.value)">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+    </select>
+    <form id="register">
+        <input id="register_email" type="email" mtrans="placeholder|email"></input>
+        <input id="register_password" type="password" mtrans="placeholder|password"></input>
+        <input id="register_repeat_password" type="password" mtrans="placeholder|repeat_password"></input>
+        <input id="register_first_name" type="text" mtrans="placeholder|first_name"></input>
+        <input id="register_last_name" type="text" mtrans="placeholder|last_name"></input>
+        <input id="register_phone" type="text" mtrans="placeholder|phone"></input>
+        <button id="register_submit" type="submit" mtrans="text|register" onclick="register_user(event)"></button>
+    </form>
+    <form id="login">
+        <input id="login_email" type="email" mtrans="placeholder|email"></input>
+        <input id="login_password" type="password" mtrans="placeholder|password"></input>
+        <button id="login_submit" type="submit" mtrans="text|login" onclick="login(event)"></button>
+    </form>
 </body>
 </html>

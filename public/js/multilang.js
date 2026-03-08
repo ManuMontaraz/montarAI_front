@@ -1,40 +1,61 @@
+let mtransCache = {}
+
 function set_language(lang){
     set_cookie("lang",lang)
     mtrans()
 }
 
-function mtrans(element){
-    const language = get_cookie("lang") || document.querySelector("html").getAttribute("lang") || 'en';
+function get_language(){
+    return get_cookie("lang") || document.querySelector("html").getAttribute("lang") || 'en'
+}
+
+function mtrans(element, lang){
+    const language = lang || get_language()
 
     const translate = (element,data)=>{
-        const split = element.getAttribute('mtrans').split(',');
+        if(typeof element === "string"){
+            return data[element] || element
+        }
+
+        const split = element.getAttribute('mtrans').split(',')
 
         split.forEach(item => {
-            const [attrPart, key] = item.trim().split("|");
-            const [attr, value] = attrPart.split("=");
-            
+            const [attrPart, key] = item.trim().split("|")
+            const [attr] = attrPart.split("=")
+
             if(attr === 'text'){
-                element.textContent = data[key] || key;
+                element.textContent = data[key] || key
             } else {
-                element.setAttribute(attr, data[key] || key);
+                element.setAttribute(attr, data[key] || key)
             }
         });
+    };
+
+    const loadLang = () => {
+        if (mtransCache[language]) {
+            return Promise.resolve(mtransCache[language])
+        }
+
+        return fetch(`locales/${language}.json`)
+            .then(r => r.json())
+            .then(data => {
+                mtransCache[language] = data
+                return data
+            })
     }
-    
-    fetch(`locales/${language}.json`)
-    .then(response => response.json())
+
+    return loadLang()
     .then(data => {
         if(!element){
-            document.querySelectorAll('[mtrans]').forEach(element => {
-                translate(element,data)
-            })
-        }else{
-            translate(element,data)
+            document.querySelectorAll('[mtrans]').forEach(el => translate(el,data))
+        } else {
+            return translate(element,data)
         }
     })
-    .catch(error => console.error('Error loading language file:', error));
+    .catch(error => console.error('Error loading language file:', error))
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector("#select_lang").value = get_language()
     mtrans()
 });

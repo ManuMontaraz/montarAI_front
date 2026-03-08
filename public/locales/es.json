@@ -1,3 +1,14 @@
 {
-    "in_development": "En desarrollo"
+    "in_development": "En desarrollo",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "repeat_password": "Repetir contraseña",
+    "first_name": "Nombre",
+    "last_name": "Apellidos",
+    "phone": "Teléfono (incluya el prefijo si no es de España)",
+    "register": "Registrarse",
+    "login": "Iniciar sesión",
+    "warn_fill_fields": "Rellene todos los campos, por favor.",
+    "warn_password_not_match": "Ambas contraseñas deben ser iguales",
+    "error_registering_user": "Ocurrió un error al registrar la nueva cuenta"
 }
