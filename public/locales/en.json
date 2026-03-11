@@ -6,6 +6,7 @@
     "first_name": "First Name",
     "last_name": "Last Name",
     "phone": "Phone (include the prefix if you are not from Spain)",
+    "remember_me": "Remember Me",
     "register": "Register",
     "login": "Login",
     "logout": "Logout",

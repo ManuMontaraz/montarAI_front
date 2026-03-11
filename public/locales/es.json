@@ -6,6 +6,7 @@
     "first_name": "Nombre",
     "last_name": "Apellidos",
     "phone": "Teléfono (incluya el prefijo si no es de España)",
+    "remember_me": "Recuérdame",
     "register": "Registrarse",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",

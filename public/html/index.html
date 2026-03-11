@@ -30,6 +30,8 @@
     <form id="login">
         <input id="login_email" type="email" mtrans="placeholder|email"></input>
         <input id="login_password" type="password" mtrans="placeholder|password"></input>
+        <label for="login_remember_me" mtrans="text|remember_me"></label>
+        <input id="login_remember_me" type="checkbox" mtrans="title|remember_me"></input>
         <button id="login_submit" type="submit" mtrans="text|login" onclick="login(event)"></button>
     </form>
     <button mtrans="text|logout,title|logout" onclick="logout(event)"></button>

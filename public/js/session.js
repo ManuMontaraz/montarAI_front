@@ -1,6 +1,29 @@
 let timeoutRefreshToken = setTimeout(()=>{},99999999)
 
-function logout(){
+function checkRememberMe(){
+    const rememberMe = localStorage.getItem("remember_me") === "true"
+    const accessToken = localStorage.getItem("access_token")
+    
+    if(rememberMe && accessToken){
+        console.log("Attempting to restore session...")
+        refresh_token()
+        .then(() => {
+            return get_current_user()
+        })
+        .then(user => {
+            if(user){
+                console.log("Session restored successfully:", user)
+                alert("Sesión restaurada correctamente")
+            }
+        })
+        .catch(error => {
+            console.error("Failed to restore session:", error)
+        })
+    }
+}
+
+function logout(event){
+    if(event) event.preventDefault()
     const accessToken = localStorage.getItem("access_token")
 
     fetch(`/api/auth/logout?lang=${get_language()}`, {
@@ -23,10 +46,12 @@ function logout(){
         console.error("Error en logout:", error)
         clearTimeout(timeoutRefreshToken)
         localStorage.removeItem("access_token")
+        localStorage.removeItem("remember_me")
     })
 }
 
-function logout_all_devices(){
+function logout_all_devices(event){
+    if(event) event.preventDefault()
     const accessToken = localStorage.getItem("access_token")
 
     fetch(`/api/auth/logout-all-devices?lang=${get_language()}`, {
@@ -49,6 +74,7 @@ function logout_all_devices(){
         console.error("Error en logout-all-devices:", error)
         clearTimeout(timeoutRefreshToken)
         localStorage.removeItem("access_token")
+        localStorage.removeItem("remember_me")
     })
 }
 
@@ -128,10 +154,11 @@ function register_user(event){
     });
 }
 
-function login(){
+function login(event){
     event.preventDefault()
     let email = document.getElementById("login_email").value
     let password = document.getElementById("login_password").value
+    let rememberMe = document.getElementById("login_remember_me").checked
 
     if(email === "" || password === ""){
         mtrans("warn_fill_fields").then(data=>{
@@ -140,7 +167,6 @@ function login(){
         return
     }
 
-    // Usar endpoint proxy del backend (mismo dominio)
     fetch(`/api/auth/login?lang=${get_language()}`, {
         method: "POST",
         headers: {
@@ -157,6 +183,7 @@ function login(){
         clearTimeout(timeoutRefreshToken)
         alert(data.message)
         localStorage.setItem("access_token",data.accessToken)
+        localStorage.setItem("remember_me",rememberMe.toString())
 
         console.log(localStorage.getItem("access_token"))
 
@@ -179,15 +206,13 @@ function refresh_token(){
     console.log("Refreshing token...")
     console.log("Access token:", accessToken)
 
-    // Usar endpoint proxy del backend (mismo dominio)
-    // La cookie refreshToken se envía automáticamente
-    fetch(`/api/auth/refresh-token?lang=${get_language()}`, {
+    return fetch(`/api/auth/refresh-token?lang=${get_language()}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`
         },
-        credentials: "include" // Importante: enviar cookies
+        credentials: "include"
     })
     .then(response => response.json())
     .then(data => {
@@ -207,10 +232,12 @@ function refresh_token(){
         }
 
         return "ok"
-
     }).catch(error => {
         console.error("Error refreshing token:", error)
-        // Opcional: redirigir a login si falla
-        // window.location.href = "/login"
+        localStorage.removeItem("access_token")
+        localStorage.removeItem("remember_me")
+        throw error
     })
 }
+
+document.addEventListener('DOMContentLoaded', checkRememberMe)
