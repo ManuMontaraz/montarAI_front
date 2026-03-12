@@ -39,6 +39,13 @@ function logout(event){
         console.log("Logout response:", data)
         clearTimeout(timeoutRefreshToken)
         localStorage.removeItem("access_token")
+        localStorage.removeItem("remember_me")
+        
+        // Notificar a otras pestañas mediante Socket.io
+        if (window.socketAuth) {
+            window.socketAuth.notifyLogout()
+        }
+        
         alert(data.message || "Sesión cerrada correctamente")
         // Opcional: redirigir a login
         // window.location.href = "/login"
@@ -67,6 +74,13 @@ function logout_all_devices(event){
         console.log("Logout all devices response:", data)
         clearTimeout(timeoutRefreshToken)
         localStorage.removeItem("access_token")
+        localStorage.removeItem("remember_me")
+        
+        // Notificar a otras pestañas mediante Socket.io
+        if (window.socketAuth) {
+            window.socketAuth.notifyLogout()
+        }
+        
         alert(data.message || "Sesión cerrada en todos los dispositivos")
         // Opcional: redirigir a login
         // window.location.href = "/login"
@@ -187,6 +201,11 @@ function login(event){
 
         console.log(localStorage.getItem("access_token"))
 
+        // Notificar a Socket.io sobre el nuevo login
+        if (window.socketAuth && window.socketAuth.socket) {
+            window.socketAuth.socket.emit('authenticate', { token: data.accessToken })
+        }
+
         if(data.accessToken && data.expiresIn){
             timeoutRefreshToken = setTimeout(()=>{
                 refresh_token()
@@ -238,6 +257,54 @@ function refresh_token(){
         localStorage.removeItem("remember_me")
         throw error
     })
+}
+
+function showForgotPassword(event){
+    event.preventDefault()
+    document.getElementById('login').classList.add('hidden')
+    document.getElementById('forgot_password_form').classList.remove('hidden')
+    document.getElementById('forgot_password_success').classList.add('hidden')
+}
+
+function sendForgotPassword(event){
+    event.preventDefault()
+    let email = document.getElementById("forgot_password_email").value
+
+    if(email === ""){
+        mtrans("warn_fill_fields").then(data=>{
+            alert(data)
+        })
+        return
+    }
+
+    fetch(`https://api.mntr.es/api/auth/forgot-password?lang=${get_language()}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: email
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Forgot password response:", data)
+        alert(data.message)
+        document.getElementById('forgot_password_form').classList.add('hidden')
+        document.getElementById('forgot_password_success').classList.remove('hidden')
+    }).catch(error => {
+        console.error("Error:", error)
+        mtrans("error_sending_email").then(data=>{
+            alert(data)
+        })
+    })
+}
+
+function backToLogin(){
+    document.getElementById('login').classList.remove('hidden')
+    document.getElementById('forgot_password_form').classList.add('hidden')
+    document.getElementById('forgot_password_success').classList.add('hidden')
+    document.getElementById("forgot_password_email").value = ""
 }
 
 document.addEventListener('DOMContentLoaded', checkRememberMe)

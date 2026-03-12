@@ -5,12 +5,16 @@ const http = require('http')
 const dns = require('dns')
 const config = require('./config')
 const routes = require('./routes')
+const { initSocketIO } = require('./sockets/authSocket')
 
 const app = express()
 
 app.use(express.json())
 
 const server = http.createServer(app)
+
+// Inicializar Socket.io
+initSocketIO(server)
 
 dns.lookup(config.DNS, (error, address) => {
     if (error) {
