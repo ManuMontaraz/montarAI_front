@@ -12,5 +12,19 @@
     "logout": "Logout",
     "warn_fill_fields": "Please fill in all fields",
     "warn_password_not_match": "Both passwords do not match",
-    "error_registering_user": "An error occurred while registering the user"
+    "error_registering_user": "An error occurred while registering the user",
+    "forgot_password": "Forgot your password?",
+    "forgot_password_title": "Reset password",
+    "send": "Send",
+    "back": "Back",
+    "forgot_password_success": "Email sent",
+    "check_email": "Check your email to reset your password",
+    "back_to_login": "Back to login",
+    "error_sending_email": "Error sending email",
+    "logged_in": "Logged in",
+    "not_logged_in": "Not logged in",
+    "welcome_user": "Welcome, {{name}}",
+    "session_restored": "Session restored successfully",
+    "session_closed": "Session closed successfully",
+    "session_closed_all_devices": "Session closed on all devices"
 }

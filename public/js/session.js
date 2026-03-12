@@ -13,7 +13,9 @@ function checkRememberMe(){
         .then(user => {
             if(user){
                 console.log("Session restored successfully:", user)
-                alert("Sesión restaurada correctamente")
+                mtrans('session_restored').then(message => {
+                    alert(message)
+                })
             }
         })
         .catch(error => {
@@ -46,7 +48,13 @@ function logout(event){
             window.socketAuth.notifyLogout()
         }
         
-        alert(data.message || "Sesión cerrada correctamente")
+        if (!data.message) {
+            mtrans('session_closed').then(msg => {
+                alert(msg)
+            })
+        } else {
+            alert(data.message)
+        }
         // Opcional: redirigir a login
         // window.location.href = "/login"
     }).catch(error => {
@@ -81,7 +89,13 @@ function logout_all_devices(event){
             window.socketAuth.notifyLogout()
         }
         
-        alert(data.message || "Sesión cerrada en todos los dispositivos")
+        if (!data.message) {
+            mtrans('session_closed_all_devices').then(msg => {
+                alert(msg)
+            })
+        } else {
+            alert(data.message)
+        }
         // Opcional: redirigir a login
         // window.location.href = "/login"
     }).catch(error => {

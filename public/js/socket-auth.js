@@ -2,7 +2,7 @@
 
 const socket = io()
 
-function updateAuthUI(isLoggedIn, user = null) {
+async function updateAuthUI(isLoggedIn, user = null) {
     // Buscar elemento cada vez (DOM puede no estar listo al cargar script)
     const authContainer = document.getElementById('is_logged_in')
     
@@ -11,14 +11,22 @@ function updateAuthUI(isLoggedIn, user = null) {
         return
     }
 
+    // Guardar el usuario para usarlo al cambiar de idioma
+    window.currentUser = user
+
     if (isLoggedIn) {
+        const userName = user ? (user.firstName || user.email) : ''
         authContainer.innerHTML = `
-            <h1>Logueado</h1>
-            ${user ? `<p>Bienvenido, ${user.firstName || user.email}</p>` : ''}
+            <h1 mtrans="text|logged_in"></h1>
+            ${user ? `<p mtrans="text|welcome_user" data-username="${userName}"></p>` : ''}
         `
     } else {
-        authContainer.innerHTML = '<h1>No logueado</h1>'
+        authContainer.innerHTML = '<h1 mtrans="text|not_logged_in"></h1>'
+        window.currentUser = null
     }
+    
+    // Traducir los elementos recién creados
+    await mtrans()
 }
 
 // Al conectar, verificar autenticación

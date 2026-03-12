@@ -12,5 +12,19 @@
     "logout": "Cerrar sesión",
     "warn_fill_fields": "Rellene todos los campos, por favor.",
     "warn_password_not_match": "Ambas contraseñas deben ser iguales",
-    "error_registering_user": "Ocurrió un error al registrar la nueva cuenta"
+    "error_registering_user": "Ocurrió un error al registrar la nueva cuenta",
+    "forgot_password": "¿Olvidaste tu contraseña?",
+    "forgot_password_title": "Recuperar contraseña",
+    "send": "Enviar",
+    "back": "Volver",
+    "forgot_password_success": "Email enviado",
+    "check_email": "Revisa tu email para restablecer la contraseña",
+    "back_to_login": "Volver al login",
+    "error_sending_email": "Error al enviar el email",
+    "logged_in": "Logueado",
+    "not_logged_in": "No logueado",
+    "welcome_user": "Bienvenido, {{name}}",
+    "session_restored": "Sesión restaurada correctamente",
+    "session_closed": "Sesión cerrada correctamente",
+    "session_closed_all_devices": "Sesión cerrada en todos los dispositivos"
 }
