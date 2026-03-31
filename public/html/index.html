@@ -15,6 +15,19 @@
     <script src="js/socket-auth.js"></script>
 </head>
 <body>
+    <section>
+        <nav>
+            <div>
+                <img id="navTree" src="images/navTree.svg" alt="tree navbar">
+            </div>
+            <div class="navLeaf">
+                <img src="images/leaf.svg" alt="leaf icon">
+                <a href="#" mtrans="text|home"></a>
+            </div>
+            <a href="#" mtrans="text|about"></a>
+            <a href="#" mtrans="text|contact"></a>
+        </nav>
+    </section>
     <h1 mtrans="text|in_development,title|in_development"></h1>
     <select id="select_lang" onchange="set_language(this.value)">
         <option value="es">Español</option>
